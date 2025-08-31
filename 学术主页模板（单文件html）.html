@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>您的姓名 | 学术主页</title>
+  <meta name="description" content="单文件学术主页（稳定修复版）：左侧侧栏，右侧正文；包含：关于我、发表论文、论文封面、招生信息、联系。" />
+
+  <style>
+    /* ================= 样式稳定修复版（不改内容，只保布局） ================= */
+    :root{
+      --bg:#ffffff;--text:#111827;--muted:#6b7280;--primary:#2563eb;--card:#f9fafb;--border:#e5e7eb;--ring:rgba(37,99,235,.35);
+      --radius:16px;--shadow-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+    }
+    html.dark{--bg:#0b1220;--text:#e5e7eb;--muted:#9ca3af;--primary:#60a5fa;--card:#0f172a;--border:#1f2937;--ring:rgba(96,165,250,.45)}
+
+    /* 基础与排版 */
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,PingFang SC,Noto Sans CJK SC,Hiragino Sans GB,Microsoft YaHei,Arial,sans-serif}
+    img{max-width:100%;height:auto;display:block}
+    a{color:var(--primary);text-decoration:none}
+    a:hover{text-decoration:underline}
+    h1,h2,h3,p,ul{margin:0 0 .6em}
+    ul{padding-inline-start:1.1em}
+
+    /* 布局：使用 flex，保证左右两列稳定 */
+    .page{max-width:1180px;margin:0 auto;padding:24px 16px 64px;display:flex;align-items:flex-start;gap:28px}
+    .sidebar{position:sticky;top:24px;align-self:flex-start;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:24px;flex:0 0 300px;max-width:300px;width:300px;min-width:260px}
+    .content{flex:1 1 auto;min-width:0}
+    @media (max-width:920px){.page{flex-direction:column}.sidebar{position:static;top:auto;flex:0 0 auto;max-width:none;width:auto;min-width:0}}
+
+    /* 侧栏元素 */
+    .avatar{width:108px;height:108px;border-radius:50%;background:linear-gradient(135deg,#93c5fd,#d8b4fe);display:grid;place-items:center;font-weight:800;color:#0b1220;font-size:28px;margin-bottom:14px;user-select:none}
+    .name{font-size:24px;font-weight:800;margin:4px 0 6px}
+    .title{color:var(--muted);margin:0 0 12px}
+    .contact{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 6px}
+    .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);padding:8px 10px;border-radius:999px;background:var(--bg);white-space:nowrap}
+    .nav-links{display:grid;gap:6px;margin-top:16px}
+    .nav-links a{display:block;padding:10px 12px;border-radius:10px;color:inherit;border:1px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .nav-links a:hover{background:var(--bg);border-color:var(--border);text-decoration:none}
+
+    /* 顶部区域 */
+    header.hero{background:linear-gradient(180deg,rgba(37,99,235,.08),transparent);border:1px solid var(--border);border-radius:var(--radius);padding:20px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:start}
+    .hero h1{font-size:28px;margin:0}
+    .hero p{margin:8px 0 0;color:var(--muted)}
+    .toolbar{display:flex;gap:10px;align-items:center;justify-self:end}
+    .mode-toggle{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--bg);color:var(--text)}
+    .mobile-nav{display:none;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .mobile-nav a{border:1px solid var(--border);padding:8px 10px;border-radius:999px}
+    @media (max-width:920px){.mobile-nav{display:flex}}
+
+    /* 内容卡片与网格 */
+    section{margin-top:28px}
+    section h2{font-size:22px;margin:0 0 12px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:18px}
+    .grid{display:grid;gap:16px}
+    .grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    @media (max-width:1100px){.grid.cols-3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media (max-width:680px){.grid.cols-3{grid-template-columns:1fr}}
+
+    /* 列表/论文 */
+    .list{display:grid;gap:12px}
+    .pub{display:grid;gap:8px;border:1px solid var(--border);border-radius:12px;padding:14px;background:var(--bg)}
+    .pub-title{font-weight:700}
+    .pub-meta{color:var(--muted);font-size:14px}
+    .tags{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:999px;background:var(--card)}
+    .links{display:flex;gap:10px;flex-wrap:wrap}
+    .link-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--border);border-radius:10px;background:var(--bg)}
+
+    /* 封面卡片 */
+    .cover-box{position:relative;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:linear-gradient(135deg,#e5e7eb,#f8fafc);display:grid;place-items:center;color:var(--muted);aspect-ratio:4/3}
+    @supports not (aspect-ratio: 4 / 3){.cover-box{height:0;padding-top:75%}}
+
+    /* 标题里可能被自动注入的 # 锚点链接（隐藏） */
+    .content h1>a[href^="#"],.content h2>a[href^="#"],.content h3>a[href^="#"],.content h4>a[href^="#"]{display:none!important}
+
+    /* 页脚/辅助 */
+    footer{margin-top:40px;color:var(--muted);font-size:14px;text-align:center}
+    :target{scroll-margin-top:90px}
+    .to-top{position:fixed;right:18px;bottom:18px;display:none;padding:10px 12px;border-radius:12px;background:var(--primary);color:#fff;border:none}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- ================= 左侧侧边栏（内容保持不变） ================= -->
+    <aside class="sidebar" aria-label="个人信息">
+      <div class="avatar" aria-hidden="true">YS</div>
+      <div class="name">您的姓名</div>
+      <div class="title">职位/头衔 · 学校/机构</div>
+
+      <div class="contact">
+        <a class="chip" href="mailto:your@email.com">邮箱</a>
+        <a class="chip" href="#" target="_blank" rel="noopener">GitHub</a>
+        <a class="chip" href="#" target="_blank" rel="noopener">Scholar</a>
+      </div>
+
+      <nav class="nav-links" aria-label="页面导航">
+        <a href="#about">关于我</a>
+        <a href="#pubs">发表论文</a>
+        <a href="#covers">论文封面</a>
+        <a href="#admissions">招生信息</a>
+        <a href="#contact">联系</a>
+      </nav>
+    </aside>
+
+    <!-- ================= 右侧内容（内容保持不变） ================= -->
+    <main class="content">
+      <header class="hero">
+        <div>
+          <h1>Hi，我是 <span style="white-space:nowrap">您的姓名</span> 👋</h1>
+          <p>研究方向：计算机视觉 · 机器学习 · 多模态（示例）</p>
+
+          <div class="mobile-nav" aria-label="移动端导航">
+            <a href="#about">关于我</a>
+            <a href="#pubs">论文</a>
+            <a href="#covers">封面</a>
+            <a href="#admissions">招生</a>
+            <a href="#contact">联系</a>
+          </div>
+        </div>
+        <div class="toolbar">
+          <button class="mode-toggle" id="modeToggle" aria-label="切换深浅色模式" title="切换深浅色模式">☾</button>
+        </div>
+      </header>
+
+      <!-- 关于我 -->
+      <section id="about" aria-labelledby="about-title">
+        <h2 id="about-title">关于我</h2>
+        <div class="card">
+          <p>我是 XXX，目前在 XXX（学校/研究所/公司）担任 XXX（职位）。研究方向包括 XXX，关注 A、B、C 等问题。</p>
+          <p>欢迎通过邮箱联系合作与交流。更多信息见下方论文与项目。</p>
+        </div>
+      </section>
+
+      <!-- 招生信息（应在“关于我”与“发表论文”之间） -->
+      <section id="admissions" aria-labelledby="admissions-title">
+        <h2 id="admissions-title">招生信息</h2>
+        <div class="card">
+          <p>我们长期招收 <strong>博士生/硕士生/实习生</strong>（方向涵盖计算机视觉、机器学习与多模态）。请先阅读 <a href="#pubs">近期论文</a> 与 <a href="#covers">论文封面</a>，再将个人材料发送至 <a href="mailto:your@email.com">your@email.com</a>。
+          邮件标题建议：<strong>申请-姓名-学校-研究方向</strong>。欢迎拥有良好编程基础（Python/PyTorch）与论文阅读能力的同学联系。</p>
+        </div>
+      </section>
+
+      <!-- 发表论文 -->
+      <section id="pubs" aria-labelledby="pubs-title">
+        <h2 id="pubs-title">发表论文</h2>
+        <div class="list">
+          <article class="pub" aria-label="论文 1">
+            <div class="pub-title">Text-guided Explorable Image Super-resolution</div>
+            <div class="pub-meta">作者：<u>您的姓名</u>，A. Author，B. Author · CVPR 2025</div>
+            <div class="tags">
+              <span class="tag">超分辨率</span><span class="tag">多模态</span>
+            </div>
+            <div class="links">
+              <a class="link-btn" href="#" target="_blank" rel="noopener">PDF</a>
+              <a class="link-btn" href="#" target="_blank" rel="noopener">Code</a>
+            </div>
+          </article>
+
+          <article class="pub" aria-label="论文 2">
+            <div class="pub-title">Diffusion Models Serve as the Eyes of LLMs</div>
+            <div class="pub-meta">作者：A. Author，<u>您的姓名</u>，B. Author · NMI 2024</div>
+            <div class="tags">
+              <span class="tag">扩散模型</span><span class="tag">视觉-语言</span>
+            </div>
+            <div class="links">
+              <a class="link-btn" href="#" target="_blank" rel="noopener">PDF</a>
+              <a class="link-btn" href="#" target="_blank" rel="noopener">BibTeX</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 论文封面 -->
+      <section id="covers" aria-labelledby="covers-title">
+        <h2 id="covers-title">论文封面</h2>
+        <div class="grid cols-3">
+          <div class="card">
+            <div class="cover-box">封面占位<br/>cover1.jpg</div>
+            <p style="margin:10px 0 0;color:var(--muted)">示例：论文标题或期刊</p>
+            <div class="links" style="margin-top:10px">
+              <a class="link-btn" href="#" target="_blank" rel="noopener">PDF</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="cover-box">封面占位<br/>cover2.png</div>
+            <p style="margin:10px 0 0;color:var(--muted)">示例：论文标题或期刊</p>
+          </div>
+          <div class="card">
+            <div class="cover-box">封面占位<br/>cover3.webp</div>
+            <p style="margin:10px 0 0;color:var(--muted)">示例：论文标题或期刊</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 联系 -->
+      <section id="contact" aria-labelledby="contact-title">
+        <h2 id="contact-title">联系</h2>
+        <div class="card">
+          <p>合作/实习/联合培养欢迎联系：<a href="mailto:your@email.com">your@email.com</a></p>
+        </div>
+      </section>
+
+      <footer>
+        <p>© <span id="year"></span> 您的姓名. 本页使用纯 HTML/CSS/JS 构建。</p>
+      </footer>
+    </main>
+  </div>
+
+  <button class="to-top" id="toTop" aria-label="返回顶部">↑ 顶部</button>
+
+  <script>
+    // 防御性 JS：任何错误都不会影响页面显示
+    (function(){
+      try{var y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();}catch(e){}
+      try{var btn=document.getElementById('modeToggle');
+        var saved=localStorage.getItem('prefers-color');
+        var systemDark=window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var shouldDark=saved? saved==='dark': systemDark;
+        document.documentElement.classList.toggle('dark',shouldDark);
+        if(btn){btn.textContent=shouldDark?'☀︎':'☾';
+          btn.addEventListener('click',function(){
+            var isDark=document.documentElement.classList.toggle('dark');
+            try{localStorage.setItem('prefers-color',isDark?'dark':'light');}catch(e){}
+            btn.textContent=isDark?'☀︎':'☾';
+          });}
+      }catch(e){}
+      try{var toTop=document.getElementById('toTop'); if(toTop){
+        var onScroll=function(){toTop.style.display=(window.scrollY>300)?'inline-block':'none'};
+        window.addEventListener('scroll',onScroll,{passive:true});
+        toTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+      }}catch(e){}
+    })();
+  </script>
+</body>
+</html>
