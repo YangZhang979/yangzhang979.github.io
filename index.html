@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>您的姓名 | 学术主页</title>
+  <title>Yang Zhang</title>
   <meta name="description" content="单文件学术主页（稳定修复版）：左侧侧栏，右侧正文；包含：关于我、发表论文、论文封面、招生信息、联系。" />
 
   <style>
@@ -70,8 +70,24 @@
     .link-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--border);border-radius:10px;background:var(--bg)}
 
     /* 封面卡片 */
-    .cover-box{position:relative;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:linear-gradient(135deg,#e5e7eb,#f8fafc);display:grid;place-items:center;color:var(--muted);aspect-ratio:4/3}
-    @supports not (aspect-ratio: 4 / 3){.cover-box{height:0;padding-top:75%}}
+    .cover-box {
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: linear-gradient(135deg,#e5e7eb,#f8fafc);
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      aspect-ratio: 3 / 4; /* 改成竖向 3:4 */
+    }
+
+    @supports not (aspect-ratio: 3 / 4) {
+      .cover-box {
+        height: 0;
+        padding-top: 133.33%; /* 高 / 宽 = 4/3 ≈ 133.33% */
+      }
+    }
 
     /* 标题里可能被自动注入的 # 锚点链接（隐藏） */
     .content h1>a[href^="#"],.content h2>a[href^="#"],.content h3>a[href^="#"],.content h4>a[href^="#"]{display:none!important}
@@ -86,22 +102,21 @@
   <div class="page">
     <!-- ================= 左侧侧边栏（内容保持不变） ================= -->
     <aside class="sidebar" aria-label="个人信息">
-      <div class="avatar" aria-hidden="true">YS</div>
-      <div class="name">您的姓名</div>
-      <div class="title">职位/头衔 · 学校/机构</div>
+      <div class="avatar" aria-hidden="true">
+        <img src="images/avatar.png" alt="Profile picture" />
+      </div>
+      <div class="name">Yang Zhang</div>
+      <div class="title">Tianjin University, Shenzhen Loop Area Institute
+      </div>
 
       <div class="contact">
-        <a class="chip" href="mailto:your@email.com">邮箱</a>
-        <a class="chip" href="#" target="_blank" rel="noopener">GitHub</a>
-        <a class="chip" href="#" target="_blank" rel="noopener">Scholar</a>
+        <a class="chip" href="mailto:yang.zhang2020@hotmail.com">E-mail</a>
+        <a class="chip" href="https://scholar.google.com/citations?hl=zh-CN&user=I8yE3AUAAAAJ" target="_blank" rel="noopener">Scholar</a>
       </div>
 
       <nav class="nav-links" aria-label="页面导航">
-        <a href="#about">关于我</a>
-        <a href="#pubs">发表论文</a>
-        <a href="#covers">论文封面</a>
-        <a href="#admissions">招生信息</a>
-        <a href="#contact">联系</a>
+        <a href="#about">About</a>
+        <a href="#pubs">Selected Publications</a>
       </nav>
     </aside>
 
@@ -109,15 +124,12 @@
     <main class="content">
       <header class="hero">
         <div>
-          <h1>Hi，我是 <span style="white-space:nowrap">您的姓名</span> 👋</h1>
-          <p>研究方向：计算机视觉 · 机器学习 · 多模态（示例）</p>
+          <h1>Yang Zhang</h1>
+          <p>Research Interests: AI for Microscopic Image Analysis, AI for Nucleic Acid Drug Design</p>
 
           <div class="mobile-nav" aria-label="移动端导航">
-            <a href="#about">关于我</a>
-            <a href="#pubs">论文</a>
-            <a href="#covers">封面</a>
-            <a href="#admissions">招生</a>
-            <a href="#contact">联系</a>
+            <a href="#about">About</a>
+            <a href="#pubs">Selected Publications</a>
           </div>
         </div>
         <div class="toolbar">
@@ -127,89 +139,194 @@
 
       <!-- 关于我 -->
       <section id="about" aria-labelledby="about-title">
-        <h2 id="about-title">关于我</h2>
+        <h2 id="about-title">About</h2>
         <div class="card">
-          <p>我是 XXX，目前在 XXX（学校/研究所/公司）担任 XXX（职位）。研究方向包括 XXX，关注 A、B、C 等问题。</p>
-          <p>欢迎通过邮箱联系合作与交流。更多信息见下方论文与项目。</p>
-        </div>
-      </section>
-
-      <!-- 招生信息（应在“关于我”与“发表论文”之间） -->
-      <section id="admissions" aria-labelledby="admissions-title">
-        <h2 id="admissions-title">招生信息</h2>
-        <div class="card">
-          <p>我们长期招收 <strong>博士生/硕士生/实习生</strong>（方向涵盖计算机视觉、机器学习与多模态）。请先阅读 <a href="#pubs">近期论文</a> 与 <a href="#covers">论文封面</a>，再将个人材料发送至 <a href="mailto:your@email.com">your@email.com</a>。
-          邮件标题建议：<strong>申请-姓名-学校-研究方向</strong>。欢迎拥有良好编程基础（Python/PyTorch）与论文阅读能力的同学联系。</p>
+          <p>Prof. Zhang is a Distinguished Professor at Tianjin University and a Visiting Professor at the University of Tokyo. He received his Ph.D. from the University of Cambridge and is a Fellow of the Royal Society of Chemistry (FRSC). His research focuses on the intersection of computational science and biology, with particular emphasis on artificial intelligence–driven biological computation, AI-powered super-resolution microscopy, and AI-based nucleic acid drug design.</p>
+          <p>In recent years, he has published more than 60 high-impact SCI papers in leading international journals, including Nature Methods, Nature Communications, Advanced Science (cover article), Med (Cell Press, cover article), Briefings in Bioinformatics, Bioinformatics, Journal of Biological Chemistry, Analytical Chemistry, and Journal of Medicinal Chemistry (cover article). He has been consecutively listed in the “World’s Top 2% Scientists” ranking from 2021 to 2023. He has also served as a reviewer for more than 60 internationally renowned journals, including Nature Biotechnology, Nature Methods, and Nature Communications.</p>
         </div>
       </section>
 
       <!-- 发表论文 -->
       <section id="pubs" aria-labelledby="pubs-title">
-        <h2 id="pubs-title">发表论文</h2>
-        <div class="list">
-          <article class="pub" aria-label="论文 1">
-            <div class="pub-title">Text-guided Explorable Image Super-resolution</div>
-            <div class="pub-meta">作者：<u>您的姓名</u>，A. Author，B. Author · CVPR 2025</div>
-            <div class="tags">
-              <span class="tag">超分辨率</span><span class="tag">多模态</span>
+        <h2 id="pubs-title">Selected Publications</h2>
+
+        <div class="grid cols-3">
+          <div class="card">
+            <div class="cover-box">
+              <img src="images/Med_cover.png" alt="Cover image" />
             </div>
+            <p style="margin:10px 0 0;color:var(--muted)">Accelerating drug discovery, development, and clinical trials by artificial intelligence</p>
+            <div class="links" style="margin-top:10px">
+              <a class="link-btn" href="#" target="_blank" rel="noopener">Paper</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="cover-box">
+              <img src="images/JMC_cover.jpg" alt="Cover image" />
+            </div>
+            <p style="margin:10px 0 0;color:var(--muted)">Clinical Translation of Aptamers for COVID-19</p>
+            <div class="links" style="margin-top:10px">
+              <a class="link-btn" href="#" target="_blank" rel="noopener">Paper</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="cover-box">
+              <img src="images/TiP_cover.png" alt="Cover image" />
+            </div>
+            <p style="margin:10px 0 0;color:var(--muted)">AI-powered microscopy image analysis for parasitology: integrating human expertise</p>
+            <div class="links" style="margin-top:10px">
+              <a class="link-btn" href="#" target="_blank" rel="noopener">Paper</a>
+            </div>
+          </div>
+        </div>
+        
+        <br>
+
+        <div class="list">
+          <article class="pub" aria-label="论文 2">
+            <div class="pub-title">(AIP) AI-empowered Super-Resolution Microscopy: A Revolution in Nanoscale Cellular Imaging</div>
+            <div class="pub-meta"></div>
+          </article>
+
+          <article class="pub" aria-label="论文 1">
+            <div class="pub-title">Rewired m<sup>6</sup>A epitranscriptomic networks link mutant p53 to neoplastic transformation</div>
+            <div class="pub-meta">Xu, A., Liu, M., Huang, M. F., Zhang, Y., Hu, R., Gingold, J. A., ... & Lee, D. F. (2023). Rewired m6A epitranscriptomic networks link mutant p53 to neoplastic transformation. Nature communications, 14(1), 1694.</div>
+            <!-- <div class="tags">
+              <span class="tag">超分辨率</span><span class="tag">多模态</span>
+            </div> -->
             <div class="links">
-              <a class="link-btn" href="#" target="_blank" rel="noopener">PDF</a>
-              <a class="link-btn" href="#" target="_blank" rel="noopener">Code</a>
+              <a class="link-btn" href="https://www.nature.com/articles/s41467-023-37398-9" target="_blank" rel="noopener">Paper</a>
             </div>
           </article>
 
           <article class="pub" aria-label="论文 2">
-            <div class="pub-title">Diffusion Models Serve as the Eyes of LLMs</div>
-            <div class="pub-meta">作者：A. Author，<u>您的姓名</u>，B. Author · NMI 2024</div>
-            <div class="tags">
-              <span class="tag">扩散模型</span><span class="tag">视觉-语言</span>
-            </div>
+            <div class="pub-title">Biomolecular interaction prediction: the era of AI</div>
+            <div class="pub-meta">Wang, H., Meng, X., & Zhang, Y. (2025). Biomolecular interaction prediction: the era of AI. Advanced Science, e09501.</div>
             <div class="links">
-              <a class="link-btn" href="#" target="_blank" rel="noopener">PDF</a>
-              <a class="link-btn" href="#" target="_blank" rel="noopener">BibTeX</a>
+              <a class="link-btn" href="https://advanced.onlinelibrary.wiley.com/doi/full/10.1002/advs.202509501" target="_blank" rel="noopener">Paper</a>
+            </div>
+          </article>
+
+          <article class="pub" aria-label="论文 2">
+            <div class="pub-title">(Cover) Accelerating drug discovery, development, and clinical trials by artificial intelligence</div>
+            <div class="pub-meta">Zhang, Y., Mastouri, M., & Zhang, Y. (2024). Accelerating drug discovery, development, and clinical trials by artificial intelligence. Med.</div>
+            <div class="links">
+              <a class="link-btn" href="https://www.cell.com/med/abstract/S2666-6340(24)00308-8" target="_blank" rel="noopener">Paper</a>
+            </div>
+          </article>
+
+          <article class="pub" aria-label="论文 2">
+            <div class="pub-title">Aptamers targeting SARS-COV-2: a promising tool to fight against COVID-19</div>
+            <div class="pub-meta">Zhang, Y., Juhas, M., & Kwok, C. K. (2023). Aptamers targeting SARS-COV-2: a promising tool to fight against COVID-19. Trends in Biotechnology, 41(4), 528-544.</div>
+            <div class="links">
+              <a class="link-btn" href="https://www.cell.com/trends/biotechnology/fulltext/S0167-7799(22)00194-9" target="_blank" rel="noopener">Paper</a>
+            </div>
+          </article>
+
+          <article class="pub" aria-label="论文 2">
+            <div class="pub-title">Deep learning for imaging and detection of microorganisms</div>
+            <div class="pub-meta">Zhang, Y., Jiang, H., Ye, T., & Juhas, M. (2021). Deep learning for imaging and detection of microorganisms. Trends in Microbiology, 29(7), 569-572.</div>
+            <div class="links">
+              <a class="link-btn" href="https://www.cell.com/trends/microbiology/abstract/S0966-842X(21)00008-1" target="_blank" rel="noopener">Paper</a>
+            </div>
+          </article>
+
+          <article class="pub" aria-label="论文 2">
+            <div class="pub-title">(Cover) AI-powered microscopy image analysis for parasitology: integrating human expertise</div>
+            <div class="pub-meta">Feng, R., Li, S., & Zhang, Y. (2024). AI-powered microscopy image analysis for parasitology: integrating human expertise. Trends in Parasitology, 40(7), 633-646.</div>
+            <div class="links">
+              <a class="link-btn" href="https://www.cell.com/trends/parasitology/abstract/S1471-4922(24)00134-X" target="_blank" rel="noopener">Paper</a>
+            </div>
+          </article>
+
+          <article class="pub" aria-label="论文 2">
+            <div class="pub-title">Predicting RNA structures and functions by artificial intelligence</div>
+            <div class="pub-meta">Zhang, J., Lang, M., Zhou, Y., & Zhang, Y. (2024). Predicting RNA structures and functions by artificial intelligence. Trends in Genetics, 40(1), 94-107.</div>
+            <div class="links">
+              <a class="link-btn" href="https://www.cell.com/trends/genetics/abstract/S0168-9525(23)00229-9" target="_blank" rel="noopener">Paper</a>
+            </div>
+          </article>
+
+          <article class="pub" aria-label="论文 2">
+            <div class="pub-title">Biosensing detection of the SARS-CoV-2 D614G mutation</div>
+            <div class="pub-meta">Zhang, Y., Xi, H., & Juhas, M. (2021). Biosensing detection of the SARS-CoV-2 D614G mutation. Trends in Genetics, 37(4), 299-302.</div>
+            <div class="links">
+              <a class="link-btn" href="https://www.sciencedirect.com/science/article/pii/S0168952520303346" target="_blank" rel="noopener">Paper</a>
+            </div>
+          </article>
+
+          <article class="pub" aria-label="论文 2">
+            <div class="pub-title">Discovery of G-quadruplex-forming sequences in SARS-CoV-2</div>
+            <div class="pub-meta">Ji, D., Juhas, M., Tsang, C. M., Kwok, C. K., Li, Y., & Zhang, Y. (2021). Discovery of G-quadruplex-forming sequences in SARS-CoV-2. Briefings in Bioinformatics, 22(2), 1150-1160.</div>
+            <div class="links">
+              <a class="link-btn" href="https://academic.oup.com/bib/article/22/2/1150/5849532" target="_blank" rel="noopener">Paper</a>
+            </div>
+          </article>
+
+          <article class="pub" aria-label="论文 2">
+            <div class="pub-title">Parasitologist-level classification of apicomplexan parasites and host cell with deep cycle transfer learning (DCTL)</div>
+            <div class="pub-meta">Li S, Yang Q, Jiang H, et al. Parasitologist-level classification of apicomplexan parasites and host cell with deep cycle transfer learning (DCTL)[J]. Bioinformatics, 2020, 36(16): 4498-4505.</div>
+            <div class="links">
+              <a class="link-btn" href="https://academic.oup.com/bioinformatics/article/36/16/4498/5837666" target="_blank" rel="noopener">Paper</a>
+            </div>
+          </article>
+
+          <article class="pub" aria-label="论文 2">
+            <div class="pub-title">A span-based joint model for extracting entities and relations of bacteria biotopes</div>
+            <div class="pub-meta">Zuo, M., & Zhang, Y. (2022). A span-based joint model for extracting entities and relations of bacteria biotopes. Bioinformatics, 38(1), 220-227.</div>
+            <div class="links">
+              <a class="link-btn" href="https://academic.oup.com/bioinformatics/article/38/1/220/6353026" target="_blank" rel="noopener">Paper</a>
+            </div>
+          </article>
+
+          <article class="pub" aria-label="论文 2">
+            <div class="pub-title">Dataset-aware multi-task learning approaches for biomedical named entity recognition</div>
+            <div class="pub-meta">Zuo, M., & Zhang, Y. (2020). Dataset-aware multi-task learning approaches for biomedical named entity recognition. Bioinformatics, 36(15), 4331-4338.</div>
+            <div class="links">
+              <a class="link-btn" href="https://academic.oup.com/bioinformatics/article/36/15/4331/5838186" target="_blank" rel="noopener">Paper</a>
+            </div>
+          </article>
+
+          <article class="pub" aria-label="论文 2">
+            <div class="pub-title">Large language models for biomolecular analysis: From methods to applications</div>
+            <div class="pub-meta">Feng, R., Zhang, C., & Zhang, Y. (2024). Large language models for biomolecular analysis: From methods to applications. TrAC Trends in Analytical Chemistry, 171, 117540.</div>
+            <div class="links">
+              <a class="link-btn" href="https://www.sciencedirect.com/science/article/abs/pii/S0165993624000220" target="_blank" rel="noopener">Paper</a>
+            </div>
+          </article>
+
+          <article class="pub" aria-label="论文 2">
+            <div class="pub-title">Cell cycle-independent role of cyclin D3 in host restriction of influenza virus infection</div>
+            <div class="pub-meta">Fan, Y., Mok, C. K. P., Chan, M. C. W., Zhang, Y., Nal, B., Kien, F., ... & Sanyal, S. (2017). Cell cycle-independent role of cyclin D3 in host restriction of influenza virus infection. Journal of Biological Chemistry, 292(12), 5070-5088.</div>
+            <div class="links">
+              <a class="link-btn" href="https://www.sciencedirect.com/science/article/pii/S0021925820341314" target="_blank" rel="noopener">Paper</a>
+            </div>
+          </article>
+
+          <article class="pub" aria-label="论文 2">
+            <div class="pub-title">Proteomic and transcriptome profiling of G-quadruplex aptamers developed for cell internalization</div>
+            <div class="pub-meta">Zhang, Y., Wu, Y., Zheng, H., Xi, H., Ye, T., Chan, C. Y., & Kwok, C. K. (2021). Proteomic and transcriptome profiling of G-quadruplex aptamers developed for cell internalization. Analytical Chemistry, 93(14), 5744-5753.</div>
+            <div class="links">
+              <a class="link-btn" href="https://pubs.acs.org/doi/abs/10.1021/acs.analchem.0c04862" target="_blank" rel="noopener">Paper</a>
+            </div>
+          </article>
+
+          <article class="pub" aria-label="论文 2">
+            <div class="pub-title">(Cover) Clinical Translation of Aptamers for COVID-19</div>
+            <div class="pub-meta">Zhang, Y., & Li, Y. (2023). Clinical Translation of Aptamers for COVID-19. Journal of Medicinal Chemistry, 66(24), 16568-16578.</div>
+            <div class="links">
+              <a class="link-btn" href="https://pubs.acs.org/doi/abs/10.1021/acs.jmedchem.3c01607" target="_blank" rel="noopener">Paper</a>
             </div>
           </article>
         </div>
       </section>
 
-      <!-- 论文封面 -->
-      <section id="covers" aria-labelledby="covers-title">
-        <h2 id="covers-title">论文封面</h2>
-        <div class="grid cols-3">
-          <div class="card">
-            <div class="cover-box">封面占位<br/>cover1.jpg</div>
-            <p style="margin:10px 0 0;color:var(--muted)">示例：论文标题或期刊</p>
-            <div class="links" style="margin-top:10px">
-              <a class="link-btn" href="#" target="_blank" rel="noopener">PDF</a>
-            </div>
-          </div>
-          <div class="card">
-            <div class="cover-box">封面占位<br/>cover2.png</div>
-            <p style="margin:10px 0 0;color:var(--muted)">示例：论文标题或期刊</p>
-          </div>
-          <div class="card">
-            <div class="cover-box">封面占位<br/>cover3.webp</div>
-            <p style="margin:10px 0 0;color:var(--muted)">示例：论文标题或期刊</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- 联系 -->
-      <section id="contact" aria-labelledby="contact-title">
-        <h2 id="contact-title">联系</h2>
-        <div class="card">
-          <p>合作/实习/联合培养欢迎联系：<a href="mailto:your@email.com">your@email.com</a></p>
-        </div>
-      </section>
-
       <footer>
-        <p>© <span id="year"></span> 您的姓名. 本页使用纯 HTML/CSS/JS 构建。</p>
       </footer>
     </main>
   </div>
 
-  <button class="to-top" id="toTop" aria-label="返回顶部">↑ 顶部</button>
+  <button class="to-top" id="toTop" aria-label="返回顶部">↑ Top</button>
 
   <script>
     // 防御性 JS：任何错误都不会影响页面显示
